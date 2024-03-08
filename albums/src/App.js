@@ -1,36 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import React from "react";
+import View from "./component/page";
+import { Provider } from "react-redux";
+import { createStore, combineReducers } from "redux";
+import Data from "./redux/reducer/data";
 
-function App() {
-  const [items, setItems] = useState([]);
+const store = createStore(
+  combineReducers({
+    Data,
+  })
+);
 
-  useEffect(() => {
-    fetchItems();
-  }, []);
-
-  const fetchItems = async () => {
-    try {
-      const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
-      }
-      const data = await response.json();
-      setItems(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+export default function App() {
   return (
-    <div className="App">
-      <h1>List of Items</h1>
-      <ul>
-        {items.map(item => (
-          <li key={item.id}>{item.title}</li>
-        ))}
-      </ul>
-    </div>
+    <Provider store={store}>
+      <View />
+    </Provider>
   );
 }
-
-export default App;
