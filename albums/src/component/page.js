@@ -8,6 +8,7 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  TextField,
   Container
 } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -18,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
-    minHeight: "100vh"
   },
   table: {
     minWidth: 300,
@@ -51,6 +51,7 @@ const App = (props) => {
   const dataStore = useSelector((state) => state.Data);
   const classes = useStyles();
   const [data, setData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/albums")
@@ -68,10 +69,25 @@ const App = (props) => {
     setData(dataStore[0]);
   }, [dataStore]);
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredData = data.filter((row) => {
+    return typeof row.title === 'string' && row.title.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
   return (
     <div className="App">
       <header>
         <h1>Albums</h1>
+        <TextField
+          label="Search"
+          variant="outlined"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          style={{ margin: "10px" }}
+        />
       </header>
       <Container className={classes.container}>
         <TableContainer style={{ margin: "auto" }}>
@@ -84,7 +100,7 @@ const App = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((row) => {
+              {filteredData.map((row) => {
                 return (
                   <StyledTableRow align="center" key={row.name}>
                     <StyledTableCell component="th" scope="row">{row.id}</StyledTableCell>
