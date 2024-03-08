@@ -23,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        flexDirection: "column"
+        flexDirection: "column",
+        backgroundColor: "#000000"
     },
     table: {
         minWidth: 300,
@@ -35,32 +36,43 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             minWidth: 100,
             margin: 5,
+            borderRadius: 10
         },
         [theme.breakpoints.up('md')]: {
             minWidth: 120,
             margin: 10,
+            borderRadius: 10
         },
     },
     button: {
         [theme.breakpoints.down('sm')]: {
-            height: 40,
+            height: 50,
             marginTop: 8,
+            borderRadius: 10
         },
         [theme.breakpoints.up('md')]: {
             height: 50,
             marginTop: 12,
+            borderRadius: 10
         },
     },
 }));
 
 const StyledTableCell = withStyles((theme) => ({
     head: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
-        fontSize: 16
+        [theme.breakpoints.down('sm')]: {
+            backgroundColor: theme.palette.common.white,
+            color: theme.palette.common.black,
+            fontSize: 30
+        },
+        [theme.breakpoints.down('md')]: {
+            backgroundColor: theme.palette.common.white,
+            color: theme.palette.common.black,
+            fontSize: 20
+        }
     },
     body: {
-        fontSize: 14,
+        fontSize: 18,
     },
 }))(TableCell);
 
@@ -80,6 +92,7 @@ const App = (props) => {
     const [sortColumn, setSortColumn] = useState('');
     const [sortOrder, setSortOrder] = useState('asc');
 
+    /*display API data*/
     useEffect(() => {
         fetch("https://jsonplaceholder.typicode.com/albums")
             .then((response) => response.json())
@@ -99,9 +112,10 @@ const App = (props) => {
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
     };
+    // search change //
 
     const handleSortChange = (event) => {
-        setSortColumn(event.target.value);
+        setSortColumn(event.target.value);/*sorting change*/
     };
 
     const handleSortOrderChange = () => {
@@ -121,43 +135,49 @@ const App = (props) => {
             return 0;
         }
         return 0;
-    });
+    });    /*sorted data*/
 
     const filteredData = sortedData.filter((row) => {
         return typeof row.title === 'string' && row.title.toLowerCase().includes(searchQuery.toLowerCase());
-    });
+    });    /*filtered data*/
 
     const Header = () => {
         return (
-            <header>
-                <h1>Albums</h1>
-                <TextField
-                    label="Search"
-                    variant="outlined"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    className={classes.formControl}
-                />
+            <header className="header">
+                <h1 className="header-text">Albums</h1>
             </header>
         );
     };
 
     const Footer = () => {
         return (
-            <footer>
-                <p>@copyright</p>
+            <footer className="footer">
+                <h1 className="header-text">@copyright</h1>
             </footer>
         );
     };
 
     return (
         <div className="App">
-            <Header/>
-            <FormControl variant="outlined" className={classes.formControl}>
+            <Header />
+            <div>
+                {/* search text field */}
+                <TextField
+                    label="Search"
+                    id="filled-password-input"
+                    variant="filled"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    className={classes.formControl}
+                    style={{ backgroundColor: 'white', borderRadius: 10 }}
+                />
+                {/* sort field */}
+                <FormControl variant="filled" className={classes.formControl}>
                     <InputLabel htmlFor="my-input">sort by</InputLabel>
                     <Select
                         value={sortColumn || ''}
                         onChange={handleSortChange}
+                        style={{ backgroundColor: 'white' }}
                     >
                         <MenuItem value="id">Id</MenuItem>
                         <MenuItem value="title">Title</MenuItem>
@@ -167,9 +187,10 @@ const App = (props) => {
                 <Button onClick={handleSortOrderChange} variant="contained" color="primary" className={classes.button}>
                     {sortOrder === 'asc' ? 'Ascending' : 'Descending'}
                 </Button>
+            </div>
             <Container className={classes.container}>
-                <TableContainer style={{ margin: "auto" }}>
-                    <Table className={classes.table} aria-label="simple table">
+                <TableContainer style={{ margin: "auto", display: "flex", justifyContent: "center" }}>
+                    <Table className={`${classes.table} table-custom`} aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <StyledTableCell align="center">Id</StyledTableCell>
@@ -192,7 +213,7 @@ const App = (props) => {
                     </Table>
                 </TableContainer>
             </Container>
-            <Footer/>
+            <Footer />
         </div>
     );
 };

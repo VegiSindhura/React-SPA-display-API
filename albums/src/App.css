@@ -1,5 +1,41 @@
+body {
+  background-color: #000000; /* Set the background color to black */
+}
 .App {
   text-align: center;
+}
+
+.header {
+  background-color: #282c34;
+  padding: 1px;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+
+.footer {
+  background-color: #282c34;
+  padding: 1px;
+}
+
+.header-text {
+  color: white;
+}
+
+.table-custom {
+  border-radius: 25px;
+  background-color: #f5f5f5; 
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.table-container {
+  margin: auto; /* Center the table horizontally */
 }
 
 .App-logo {
